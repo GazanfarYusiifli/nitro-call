@@ -1,8 +1,1 @@
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "npm install",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
-  ]
-}
+{"installCommand": "npm install", "buildCommand": "npm run build"}
