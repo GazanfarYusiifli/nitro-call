@@ -700,9 +700,16 @@ const Room = (props) => {
         if (!streamReady || !streamRef.current) return;
         try {
             const newMode = isFrontCamera ? "environment" : "user";
-            const newStream = await navigator.mediaDevices.getUserMedia({ 
-                video: { facingMode: newMode }
-            });
+            let newStream;
+            try {
+                newStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: newMode === "environment" ? { exact: "environment" } : "user" }
+                });
+            } catch (err) {
+                newStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: newMode }
+                });
+            }
             
             const newVideoTrack = newStream.getVideoTracks()[0];
             const oldVideoTrack = cameraTrackRef.current;
