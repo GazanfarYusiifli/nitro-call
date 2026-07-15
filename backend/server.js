@@ -6,7 +6,16 @@ const cors = require('cors');
 const { OpenAI } = require('openai');
 
 const app = express();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// Lazy OpenAI init — server starts even without API key
+let _openai = null;
+const getOpenAI = () => {
+    if (!_openai) {
+        if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is not set');
+        _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    }
+    return _openai;
+};
 
 app.use(cors());
 app.use(express.json());
@@ -19,7 +28,7 @@ app.post('/translate', async (req, res) => {
 
         const prompt = `Translate the following text into the language code '${target || 'en'}'. Return ONLY the exact translated text without any conversational fillers, quotes, or explanations.\n\nText: ${q}`;
 
-        const completion = await openai.chat.completions.create({
+        const completion = await getOpenAI().chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
                 { role: "system", content: "You are a professional, highly accurate translator." },
