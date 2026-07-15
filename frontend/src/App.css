@@ -1,3 +1,15 @@
+.app-container {
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  /* Ensure content stays within safe areas (e.g. status bar) */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;

@@ -10,15 +10,10 @@ To test the application on other devices (like your phone) on the same Wi-Fi net
    - Add `http://192.168.100.228:5173` to the list.
    - Select "Enabled" and relaunch Chrome.
 
-## Option 2: Using Ngrok (Recommended for easy HTTPS)
-If you want a public, secure URL that works everywhere:
-1. Install [ngrok](https://ngrok.com/).
-2. Run in a new terminal:
-   ```bash
-   ngrok http 5173
-   ```
-3. Use the `https://...` URL provided by ngrok on any device.
+## Option 2: Production Domain (Recommended)
+1. Simply open **http://nitrocalls.online** on any device with internet access.
+2. This is the easiest and most secure way to test as it has a valid SSL certificate (via HTTPS redirect if configured, or plain HTTP if not yet secured).
 
 ## Troubleshooting
-- **No Video?** Ensure both devices are on the same network and the backend server (port 5001) is running.
-- **Firewall**: Ensure your computer's firewall allows incoming connections on ports 5173 and 5001.
+- **No Video?** Ensure the backend server is running and you have granted camera/microphone permissions in your browser.
+- **Firewall**: On a local network, ensure your computer's firewall allows incoming connections on ports 5173 and 5001.

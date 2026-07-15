@@ -17,13 +17,18 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 5173,
-    allowedHosts: 'all',
+    allowedHosts: true,
     https: false,
     proxy: {
       '/socket.io': {
         target: 'http://127.0.0.1:5001',
         ws: true,
         changeOrigin: true,
+      },
+      '/translate': {
+        target: 'http://127.0.0.1:5002',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/translate/, '')
       },
     },
   },

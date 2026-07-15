@@ -12,9 +12,8 @@ const ParticipantList = ({ participants, currentUser, onClose, isModerator, onKi
         >
             <div className="chat-header">
                 <h3>Participants ({participants.length + 1})</h3>
-                <button onClick={onClose} className="p-3 hover:bg-slate-700/50 rounded-lg transition-colors flex items-center gap-1" aria-label="Close participants">
-                    <span className="text-sm font-medium text-slate-400 mr-2 md:hidden">Close</span>
-                    <X size={24} className="text-slate-400" />
+                <button onClick={onClose} className="close-participants-btn" aria-label="Close participants">
+                    <X size={20} />
                 </button>
             </div>
             

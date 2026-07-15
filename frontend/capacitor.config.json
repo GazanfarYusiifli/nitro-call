@@ -1,0 +1,9 @@
+{
+  "appId": "com.nitrocall.app",
+  "appName": "NitroCall",
+  "webDir": "dist",
+  "server": {
+    "url": "https://nitrocalls.online",
+    "cleartext": true
+  }
+}

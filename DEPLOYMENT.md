@@ -36,7 +36,7 @@ Create `/etc/nginx/sites-available/nitro-call`:
 ```nginx
 server {
     listen 80;
-    server_name yourdomain.com;
+    server_name nitrocalls.online www.nitrocalls.online;
 
     location / {
         root /var/www/nitro-call/html;
@@ -63,7 +63,7 @@ sudo system_status restart nginx
 ## 5. SSL with Let's Encrypt
 ```bash
 sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d yourdomain.com
+sudo certbot --nginx -d nitrocalls.online
 ```
 
 > [!IMPORTANT]
