@@ -1011,6 +1011,7 @@ const Room = (props) => {
                                 autoPlay 
                                 playsInline 
                                 muted 
+                                className={isFrontCamera ? "local-video" : ""}
                                 ref={(ref) => {
                                     if (ref && streamRef.current) ref.srcObject = streamRef.current;
                                 }} 
@@ -1088,7 +1089,7 @@ const Room = (props) => {
                                         muted 
                                         autoPlay 
                                         playsInline 
-                                        className={sharingId === socketRef.current?.id ? "" : "local-video"} 
+                                        className={sharingId === socketRef.current?.id ? "" : (isFrontCamera ? "local-video" : "")} 
                                         ref={(node) => {
                                             userVideo.current = node;
                                             if (node && streamRef.current) {
@@ -1131,7 +1132,7 @@ const Room = (props) => {
                                     muted 
                                     autoPlay 
                                     playsInline 
-                                    className={sharingId === socketRef.current?.id ? "" : "local-video"} 
+                                    className={sharingId === socketRef.current?.id ? "" : (isFrontCamera ? "local-video" : "")} 
                                     ref={(node) => {
                                         userVideo.current = node;
                                         if (node && streamRef.current) {
