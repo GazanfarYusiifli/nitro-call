@@ -489,7 +489,7 @@ const Room = (props) => {
         // --- MEDIA STREAM SETUP ---
         const startMedia = () => {
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: true })
                     .then(stream => {
                         if (isCancelled) {
                             stream.getTracks().forEach(t => t.stop());
