@@ -700,35 +700,41 @@ const Room = (props) => {
         if (!streamReady || !streamRef.current) return;
         const oldVideoTrack = cameraTrackRef.current;
         try {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const videoDevices = devices.filter(d => d.kind === 'videoinput');
-            
-            const useFacingMode = videoDevices.length < 2 || !videoDevices[0].deviceId;
-            
-            // Mövcud kameranı dayandırırıq və Android cihazlarda hardware kilidinin 
-            // açılması üçün mütləq 400ms gözləyirik.
+            // Android hardware lock-u üçün mütləq köhnəni saxlayıb gözləyirik
             if (oldVideoTrack) {
                 oldVideoTrack.stop();
-                await new Promise(resolve => setTimeout(resolve, 400));
+                await new Promise(resolve => setTimeout(resolve, 500));
             }
 
             let newStream;
-            if (useFacingMode) {
-                const newMode = isFrontCamera ? "environment" : "user";
-                try {
-                    newStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: newMode } } });
-                } catch (e) {
-                    newStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: newMode } });
-                }
-            } else {
-                const currentLabel = oldVideoTrack ? oldVideoTrack.label : "";
-                let currentIndex = videoDevices.findIndex(d => d.label === currentLabel);
-                if (currentIndex === -1) currentIndex = isFrontCamera ? 0 : 1;
-                
-                const nextDevice = videoDevices[(currentIndex + 1) % videoDevices.length];
+            const newMode = isFrontCamera ? "environment" : "user";
+            
+            try {
+                // 1. Əvvəlcə exact facingMode yoxlayırıq (Mobil üçün ən yaxşısı)
                 newStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { deviceId: { exact: nextDevice.deviceId } }
+                    video: { facingMode: { exact: newMode } } 
                 });
+            } catch (err1) {
+                try {
+                    // 2. Exact alınmasa, ideal facingMode yoxlayırıq
+                    newStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: newMode } 
+                    });
+                } catch (err2) {
+                    // 3. Əgər hər ikisi alınmasa (məsələn PC-də), cihazları siyahıya alıb növbətini seçirik
+                    const devices = await navigator.mediaDevices.enumerateDevices();
+                    const videoDevices = devices.filter(d => d.kind === 'videoinput');
+                    if (videoDevices.length < 2) throw new Error("Yalnız bir kamera tapıldı");
+                    
+                    const currentLabel = oldVideoTrack ? oldVideoTrack.label : "";
+                    let currentIndex = videoDevices.findIndex(d => d.label === currentLabel);
+                    if (currentIndex === -1) currentIndex = isFrontCamera ? 0 : 1;
+                    
+                    const nextDevice = videoDevices[(currentIndex + 1) % videoDevices.length];
+                    newStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { deviceId: { exact: nextDevice.deviceId } }
+                    });
+                }
             }
             
             const newVideoTrack = newStream.getVideoTracks()[0];
