@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Mic, MicOff, Video, VideoOff, LogOut, Monitor, MessageSquare } from 'lucide-react';
+import { Mic, MicOff, Video, VideoOff, LogOut, Monitor, MessageSquare, Hand, Smile, Users, XCircle, Link } from 'lucide-react';
 
-const Controls = ({ stream, onLeave, onShareScreen, onToggleChat }) => {
+const Controls = ({ stream, onLeave, onShareScreen, onToggleChat, onToggleParticipants, onRaiseHand, onShowEmojis, onInvite, isHandRaised, isModerator, onCloseMeeting }) => {
     const [micOn, setMicOn] = useState(true);
     const [cameraOn, setCameraOn] = useState(true);
 
@@ -44,6 +44,31 @@ const Controls = ({ stream, onLeave, onShareScreen, onToggleChat }) => {
             </button>
 
             <button 
+                onClick={onRaiseHand} 
+                className={`control-btn ${isHandRaised ? 'active' : ''}`}
+                title="Raise Hand"
+                style={isHandRaised ? { backgroundColor: '#f59e0b' } : {}}
+            >
+                <Hand size={24} />
+            </button>
+
+            <button 
+                onClick={onShowEmojis} 
+                className="control-btn"
+                title="Reactions"
+            >
+                <Smile size={24} />
+            </button>
+
+            <button 
+                onClick={onInvite} 
+                className="control-btn"
+                title="Copy Invite Link"
+            >
+                <Link size={24} />
+            </button>
+
+            <button 
                 onClick={onShareScreen} 
                 className="control-btn"
                 title="Share Screen"
@@ -60,12 +85,31 @@ const Controls = ({ stream, onLeave, onShareScreen, onToggleChat }) => {
             </button>
 
             <button 
+                onClick={onToggleParticipants} 
+                className="control-btn"
+                title="Participants"
+            >
+                <Users size={24} />
+            </button>
+
+            <button 
                 onClick={onLeave} 
                 className="control-btn leave-btn"
                 title="Leave Call"
             >
                 <LogOut size={24} />
             </button>
+
+            {isModerator && (
+                <button 
+                    onClick={onCloseMeeting} 
+                    className="control-btn end-meeting-btn"
+                    title="End Meeting for All"
+                    style={{ backgroundColor: '#ef4444' }}
+                >
+                    <XCircle size={24} />
+                </button>
+            )}
         </div>
     );
 };
