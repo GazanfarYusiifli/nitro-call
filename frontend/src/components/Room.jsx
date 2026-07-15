@@ -371,13 +371,15 @@ const Room = (props) => {
                     localStorage.setItem('nitro_recent_contacts', JSON.stringify(recent.slice(-20)));
                 }
 
-                // Just add a placeholder in peersRef if not there
+                // Add placeholder if not already tracked
                 if (!peersRef.current.find(p => p.peerID === id)) {
                     peersRef.current.push({
                         peerID: id, username, stream: null, status: 'connecting', isHandRaised: false, isCameraOff: false, nativeLang: nativeLang || 'az-AZ'
                     });
                 }
                 setPeers([...peersRef.current]);
+                // NOTE: The new joiner will send us a 'user-joined-signal' via the 'all-users' → initiatePeerConnection flow.
+                // We do NOT initiate here to avoid double-connections. The signal will arrive via 'user-joined-signal'.
             },
             "user-camera-toggled": ({ id, isOff }) => {
                 const target = peersRef.current.find(p => p.peerID === id);
@@ -402,7 +404,9 @@ const Room = (props) => {
             "user-left": id => {
                 playSound('leave');
                 const pObj = peersRef.current.find(p => p.peerID === id);
-                if (pObj) pObj.peer.destroy();
+                if (pObj && pObj.peer && !pObj.peer.destroyed) {
+                    try { pObj.peer.destroy(); } catch(e) { console.warn("Peer destroy error:", e); }
+                }
                 peersRef.current = peersRef.current.filter(p => p.peerID !== id);
                 setPeers(prev => prev.filter(p => p.peerID !== id));
             },
@@ -518,7 +522,11 @@ const Room = (props) => {
             if (userVideo.current) {
                 userVideo.current.srcObject = null;
             }
-            peersRef.current.forEach(p => p.peer.destroy());
+            peersRef.current.forEach(p => {
+                if (p.peer && !p.peer.destroyed) {
+                    try { p.peer.destroy(); } catch(e) { console.warn("Cleanup peer destroy error:", e); }
+                }
+            });
             peersRef.current = [];
         };
     }, [roomID, props.username, props.socket]);
@@ -545,16 +553,25 @@ const Room = (props) => {
 
         const sendStream = getCleanStream();
         const peer = createPeer(userID, socketRef.current?.id, sendStream);
-        const pObj = {
-            peerID: userID,
-            peer,
-            sendStream,
-            username: username || "Participant",
-            nativeLang: 'az-AZ',
-            status: 'connecting',
-            stream: null
-        };
-        peersRef.current.push(pObj);
+
+        if (existing) {
+            // Update placeholder peer in place (created by user-joined event)
+            existing.peer = peer;
+            existing.sendStream = sendStream;
+            existing.username = username || existing.username;
+            existing.status = 'connecting';
+        } else {
+            const pObj = {
+                peerID: userID,
+                peer,
+                sendStream,
+                username: username || "Participant",
+                nativeLang: 'az-AZ',
+                status: 'connecting',
+                stream: null
+            };
+            peersRef.current.push(pObj);
+        }
         
         peer.on("stream", remoteStream => {
             const curP = peersRef.current.find(p => p.peerID === userID);
