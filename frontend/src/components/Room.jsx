@@ -161,9 +161,24 @@ const Room = (props) => {
     const recordedChunksRef = useRef([]);
 
     const iceServersRef = useRef([
+        // Massive STUN server list for maximum NAT traversal success globally
         { urls: "stun:stun.l.google.com:19302" },
         { urls: "stun:stun1.l.google.com:19302" },
         { urls: "stun:stun2.l.google.com:19302" },
+        { urls: "stun:stun3.l.google.com:19302" },
+        { urls: "stun:stun4.l.google.com:19302" },
+        { urls: "stun:global.stun.twilio.com:3478" },
+        { urls: "stun:stun.cloudflare.com:3478" },
+        { urls: "stun:stun.services.mozilla.com" },
+        { urls: "stun:stun.miwifi.com:3478" },
+        { urls: "stun:stun.ekiga.net" },
+        { urls: "stun:stun.ideasip.com" },
+        { urls: "stun:stun.schlund.de" },
+        { urls: "stun:stun.voiparound.com" },
+        { urls: "stun:stun.voipbuster.com" },
+        { urls: "stun:stun.voipstunt.com" },
+        { urls: "stun:stun.voxgratia.org" },
+        // Free TURN server fallback (often rate limited, but included just in case)
         {
             urls: "turn:openrelay.metered.ca:80",
             username: "openrelayproject",
