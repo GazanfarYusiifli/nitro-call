@@ -611,7 +611,7 @@ const Room = (props) => {
         });
 
         peer.on("error", err => {
-            console.error(`Peer error with ${username}:`, err);
+            console.error(`Peer error with ${userToSignal}:`, err);
             alert("Bağlantı Hatası: " + err.message);
         });
 
