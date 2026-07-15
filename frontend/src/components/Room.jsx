@@ -184,7 +184,13 @@ const Room = (props) => {
     useEffect(() => {
         const fetchIce = async () => {
             try {
-                const url = (import.meta.env.VITE_BACKEND_URL || "") + "/turn-credentials";
+                let baseBackend = import.meta.env.VITE_BACKEND_URL || "";
+                if (!baseBackend && import.meta.env.RAILWAY_PUBLIC_DOMAIN) {
+                    baseBackend = "https://" + import.meta.env.RAILWAY_PUBLIC_DOMAIN;
+                } else if (!baseBackend && import.meta.env.RAILWAY_STATIC_URL) {
+                    baseBackend = "https://" + import.meta.env.RAILWAY_STATIC_URL;
+                }
+                const url = baseBackend + "/turn-credentials";
                 const res = await fetch(url);
                 if (res.ok) {
                     const data = await res.json();

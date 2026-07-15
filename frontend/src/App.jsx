@@ -4,7 +4,12 @@ import { Video, Shield, User } from 'lucide-react';
 import Home from './components/Home';
 import Room from './components/Room';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
+let BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
+if (!BACKEND_URL && import.meta.env.RAILWAY_PUBLIC_DOMAIN) {
+    BACKEND_URL = "https://" + import.meta.env.RAILWAY_PUBLIC_DOMAIN;
+} else if (!BACKEND_URL && import.meta.env.RAILWAY_STATIC_URL) {
+    BACKEND_URL = "https://" + import.meta.env.RAILWAY_STATIC_URL;
+}
 
 function App() {
     const [roomID, setRoomID] = useState(null);

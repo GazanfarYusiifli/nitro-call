@@ -4,6 +4,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // https://vite.dev/config/
 export default defineConfig({
+  envPrefix: ['VITE_', 'RAILWAY_'],
   plugins: [
     react(),
     nodePolyfills({
