@@ -48,44 +48,16 @@ app.post('/translate', async (req, res) => {
 // --- TURN CREDENTIALS ROUTE ---
 app.get('/turn-credentials', async (req, res) => {
     try {
-        const appName = process.env.METERED_APP_NAME || "nitrocalls";
-        const secretKey = process.env.METERED_SECRET_KEY;
-        
-        if (!secretKey) throw new Error("METERED_SECRET_KEY not set");
-
-        const response = await fetch(`https://${appName}.metered.live/api/v1/turn/credential?secretKey=${secretKey}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ expiryInSeconds: 86400 })
-        });
+        const response = await fetch("https://nitro.metered.live/api/v1/turn/credentials?apiKey=9f67cd803a30f40f04e510bb629aa265b4ec");
         
         if (!response.ok) throw new Error("Failed to fetch from Metered");
-        const data = await response.json();
+        const data = await response.json(); // returns an array of ice servers
 
-        res.json({
-            iceServers: [
-                { urls: "stun:stun.l.google.com:19302" },
-                { urls: "stun:stun1.l.google.com:19302" },
-                {
-                    urls: `turn:${appName}.metered.live:80`,
-                    username: data.username,
-                    credential: data.password
-                },
-                {
-                    urls: `turn:${appName}.metered.live:443`,
-                    username: data.username,
-                    credential: data.password
-                },
-                {
-                    urls: `turn:${appName}.metered.live:443?transport=tcp`,
-                    username: data.username,
-                    credential: data.password
-                }
-            ]
-        });
+        // We can safely return the exact array provided by Metered
+        res.json({ iceServers: data });
     } catch (err) {
-        console.error("TURN error:", err);
-        // Fallback to the dedicated VPS TURN server if Metered fails
+        console.error("Failed to generate TURN credentials:", err);
+        // Fallback to free STUN and openrelay if API fails
         res.json({
             iceServers: [
                 { urls: "stun:stun.l.google.com:19302" },
@@ -97,11 +69,6 @@ app.get('/turn-credentials', async (req, res) => {
                 },
                 {
                     urls: "turn:openrelay.metered.ca:443",
-                    username: "openrelayproject",
-                    credential: "openrelayproject"
-                },
-                {
-                    urls: "turn:openrelay.metered.ca:443?transport=tcp",
                     username: "openrelayproject",
                     credential: "openrelayproject"
                 }
