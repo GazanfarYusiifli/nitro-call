@@ -698,8 +698,13 @@ const Room = (props) => {
 
     const switchCamera = async () => {
         if (!streamReady || !streamRef.current) return;
+        const oldVideoTrack = cameraTrackRef.current;
         try {
             const newMode = isFrontCamera ? "environment" : "user";
+            
+            // Stop the current track first to release hardware lock on mobile devices
+            if (oldVideoTrack) oldVideoTrack.stop();
+
             let newStream;
             try {
                 newStream = await navigator.mediaDevices.getUserMedia({ 
@@ -712,9 +717,6 @@ const Room = (props) => {
             }
             
             const newVideoTrack = newStream.getVideoTracks()[0];
-            const oldVideoTrack = cameraTrackRef.current;
-            
-            if (oldVideoTrack) oldVideoTrack.stop();
             
             if (streamRef.current) {
                 forceSingleVideoTrack(newVideoTrack);
@@ -740,7 +742,23 @@ const Room = (props) => {
             setIsFrontCamera(!isFrontCamera);
         } catch (err) {
             console.error("Failed to switch camera:", err);
-            alert("Other camera not found or failed to switch.");
+            alert("Digər kamera tapılmadı və ya açılmadı.");
+            // Try to recover original camera
+            try {
+                const recStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: isFrontCamera ? "user" : "environment" }});
+                const recTrack = recStream.getVideoTracks()[0];
+                forceSingleVideoTrack(recTrack);
+                cameraTrackRef.current = recTrack;
+                peersRef.current.forEach(({ peer, sendStream }) => {
+                    if (peer && !peer.destroyed && !activeScreenTrackRef.current && !activeWhiteboardTrackRef.current) {
+                        peer.replaceTrack(oldVideoTrack, recTrack, sendStream);
+                    }
+                });
+                if (userVideo.current) userVideo.current.srcObject = streamRef.current;
+                if (localCameraOff) recTrack.enabled = false;
+            } catch (e) {
+                console.error("Camera recovery failed", e);
+            }
         }
     };
 
