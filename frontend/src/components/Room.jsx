@@ -700,21 +700,44 @@ const Room = (props) => {
         if (!streamReady || !streamRef.current) return;
         const oldVideoTrack = cameraTrackRef.current;
         try {
-            const newMode = isFrontCamera ? "environment" : "user";
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(d => d.kind === 'videoinput');
             
-            // Stop the current track first to release hardware lock on mobile devices
+            if (videoDevices.length < 2) {
+                // Əgər ancaq 1 cihaz tapılsa, facingMode ilə fallback yoxlayaq (Bəzi telefonlarda enumerateDevices işləmir)
+                const newMode = isFrontCamera ? "environment" : "user";
+                if (oldVideoTrack) oldVideoTrack.stop();
+                let newStream;
+                try {
+                    newStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: newMode } } });
+                } catch (e) {
+                    newStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: newMode } });
+                }
+                const newVideoTrack = newStream.getVideoTracks()[0];
+                if (streamRef.current) forceSingleVideoTrack(newVideoTrack);
+                cameraTrackRef.current = newVideoTrack;
+                peersRef.current.forEach(({ peer, sendStream }) => {
+                    if (peer && !peer.destroyed && !activeScreenTrackRef.current && !activeWhiteboardTrackRef.current) {
+                        peer.replaceTrack(oldVideoTrack, newVideoTrack, sendStream);
+                    }
+                });
+                if (userVideo.current) userVideo.current.srcObject = streamRef.current;
+                if (localCameraOff) newVideoTrack.enabled = false;
+                setIsFrontCamera(!isFrontCamera);
+                return;
+            }
+
+            const currentLabel = oldVideoTrack ? oldVideoTrack.label : "";
+            let currentIndex = videoDevices.findIndex(d => d.label === currentLabel);
+            if (currentIndex === -1) currentIndex = 0;
+            
+            const nextDevice = videoDevices[(currentIndex + 1) % videoDevices.length];
+            
             if (oldVideoTrack) oldVideoTrack.stop();
 
-            let newStream;
-            try {
-                newStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: newMode === "environment" ? { exact: "environment" } : "user" }
-                });
-            } catch (err) {
-                newStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: newMode }
-                });
-            }
+            const newStream = await navigator.mediaDevices.getUserMedia({ 
+                video: { deviceId: { exact: nextDevice.deviceId } }
+            });
             
             const newVideoTrack = newStream.getVideoTracks()[0];
             
