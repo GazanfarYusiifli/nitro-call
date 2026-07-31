@@ -1,0 +1,243 @@
+/* ============================================================
+   PREMIUM CYBER-DARK & GLASSMORPHISM THEME OVERRIDES
+   ============================================================ */
+
+/* Global Variables & Theming */
+:root {
+  --primary-glow: rgba(99, 102, 241, 0.5); /* Indigo glow */
+  --secondary-glow: rgba(34, 211, 238, 0.5); /* Cyan glow */
+  --glass-bg: rgba(15, 23, 42, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(24px);
+  --neon-indigo: #6366f1;
+  --neon-cyan: #22d3ee;
+}
+
+/* Base Body with mesh gradient */
+body {
+  background-color: #020617 !important;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.12), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(34, 211, 238, 0.12), transparent 40%) !important;
+  background-attachment: fixed !important;
+  color: #f8fafc !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+/* ============================================================
+   HOME LOBBY OVERRIDES
+   ============================================================ */
+
+/* The main home container */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 2rem;
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* Glassmorphism Cards */
+.home-card, .home-section, .lobby-section .glass-card {
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  -webkit-backdrop-filter: var(--glass-blur) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+  padding: 2.5rem !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.home-card:hover, .home-section:hover {
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 20px var(--primary-glow) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+/* Input Fields */
+input[type="text"] {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+  padding: 1rem 1.25rem !important;
+  font-size: 1rem !important;
+  transition: all 0.3s ease !important;
+}
+
+input[type="text"]:focus {
+  outline: none !important;
+  border-color: var(--neon-indigo) !important;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2) !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Buttons */
+.join-btn, .create-btn, .modal-btn, .primary-btn {
+  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 1rem 2rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  color: #fff !important;
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4) !important;
+}
+
+.join-btn:hover, .create-btn:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  box-shadow: 0 8px 25px rgba(79, 70, 229, 0.6) !important;
+}
+
+/* Active Room Items */
+.room-item {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 16px !important;
+  padding: 1.25rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.room-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 0 15px var(--secondary-glow) !important;
+  transform: translateX(5px) !important;
+}
+
+/* ============================================================
+   ROOM & VIDEO CALL OVERRIDES
+   ============================================================ */
+
+/* The actual video boxes */
+.video-container {
+  background: #000 !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.4s ease !important;
+  position: relative !important;
+}
+
+.video-container:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Speaking Indicator Glow */
+.video-container.speaking {
+  border: 2px solid var(--neon-cyan) !important;
+  box-shadow: 0 0 25px var(--secondary-glow) !important;
+}
+
+/* The name badge on the video */
+.username-tag {
+  background: rgba(15, 23, 42, 0.7) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 500 !important;
+  bottom: 1rem !important;
+  left: 1rem !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Floating Controls Dock (macOS / iOS style) */
+.controls-bar {
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 999px !important; /* Pill shape */
+  padding: 0.75rem 1.5rem !important;
+  width: auto !important;
+  max-width: fit-content !important;
+  margin: 0 auto 1.5rem auto !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset !important;
+  display: flex !important;
+  gap: 1rem !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Control Buttons */
+.control-btn {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 50% !important;
+  width: 52px !important;
+  height: 52px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  color: #e2e8f0 !important;
+}
+
+.control-btn:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  transform: scale(1.1) !important;
+  color: #fff !important;
+}
+
+.control-btn.active, .control-btn.on {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.control-btn.off {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.leave-btn, .end-meeting-btn {
+  background: #ef4444 !important;
+  color: white !important;
+  border-radius: 20px !important; /* slightly wide pill or just circle */
+  width: 64px !important;
+  height: 52px !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4) !important;
+}
+
+.leave-btn:hover, .end-meeting-btn:hover {
+  background: #dc2626 !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.6) !important;
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
