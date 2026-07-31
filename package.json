@@ -1,0 +1,7 @@
+{
+  "name": "nitro-call-root",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm install && CI=false npx vite build"
+  }
+}
