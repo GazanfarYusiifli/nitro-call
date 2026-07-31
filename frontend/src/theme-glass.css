@@ -1,35 +1,42 @@
 /* ============================================================
-   ULTRA-MINIMALIST (VERCEL/LINEAR STYLE) THEME OVERRIDES
+   PREMIUM GLASSMORPHISM THEME OVERRIDES (MACOS/VISIONOS STYLE)
    ============================================================ */
 
 /* Global Variables & Theming */
 :root {
-  --bg-color: #000000;
-  --card-bg: #0a0a0a;
-  --border-color: rgba(255, 255, 255, 0.1);
-  --border-hover: rgba(255, 255, 255, 0.25);
+  --bg-dark: #050510;
+  --glass-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-border-highlight: rgba(255, 255, 255, 0.3);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   --text-primary: #ffffff;
-  --text-secondary: #888888;
-  --btn-primary-bg: #ffffff;
-  --btn-primary-text: #000000;
-  --btn-primary-hover: #e5e5e5;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --btn-primary-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.8) 0%, rgba(59, 130, 246, 0.8) 100%);
+  --btn-primary-hover: linear-gradient(135deg, rgba(99, 102, 241, 1) 0%, rgba(59, 130, 246, 1) 100%);
+  --accent-cyan: #22d3ee;
   --accent-destructive: #ef4444;
-  --accent-destructive-hover: #dc2626;
 }
 
-/* Base Body */
+/* Base Body with deep animated mesh gradient */
 body {
-  background-color: var(--bg-color) !important;
-  background-image: none !important;
+  background-color: var(--bg-dark) !important;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(34, 211, 238, 0.15), transparent 25%) !important;
   color: var(--text-primary) !important;
   font-family: 'Inter', system-ui, sans-serif !important;
   -webkit-font-smoothing: antialiased;
+  background-attachment: fixed !important;
+}
+
+/* Hide the old CSS blob animations from Home.jsx completely */
+.animated-bg, .blob {
+  display: none !important;
 }
 
 /* ============================================================
    HOME LOBBY OVERRIDES
    ============================================================ */
-
 .home-container {
   display: flex;
   flex-direction: column;
@@ -37,43 +44,46 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   gap: 2rem;
-  animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Minimalist Cards */
-.home-card, .home-section, .glass-card {
-  background: var(--card-bg) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: 12px !important; /* Sharper corners */
-  box-shadow: none !important;
-  padding: 2.5rem !important;
-  transition: border-color 0.2s ease !important;
+/* Premium Glass Cards */
+.home-card, .home-section, .glass-card, .lobby-card, .main-card, .room-item {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(40px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(150%) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-top: 1px solid var(--glass-border-highlight) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--glass-shadow) !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
-.home-card:hover, .home-section:hover, .glass-card:hover {
-  border-color: var(--border-hover) !important;
-  box-shadow: none !important;
+.home-card:hover, .home-section:hover, .glass-card:hover, .room-item:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45) !important;
+  border-top-color: rgba(255, 255, 255, 0.4) !important;
 }
 
-/* Input Fields */
+/* Input Fields - Deep Glossy */
 input[type="text"] {
-  background: var(--bg-color) !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: 8px !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
   color: var(--text-primary) !important;
-  padding: 0.875rem 1rem !important;
-  font-size: 0.875rem !important;
-  transition: border-color 0.2s ease !important;
-  box-shadow: none !important;
+  padding: 1rem 1.25rem !important;
+  font-size: 0.95rem !important;
+  transition: all 0.3s ease !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2) !important;
+  backdrop-filter: blur(10px) !important;
 }
 
 input[type="text"]:focus {
   outline: none !important;
-  border-color: var(--text-primary) !important;
-  background: var(--bg-color) !important;
-  box-shadow: none !important;
+  border-color: var(--accent-cyan) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.2), inset 0 2px 4px rgba(0,0,0,0.2) !important;
 }
 
 input[type="text"]::placeholder {
@@ -83,190 +93,153 @@ input[type="text"]::placeholder {
 /* Buttons */
 .join-btn, .create-btn, .modal-btn, .primary-btn {
   background: var(--btn-primary-bg) !important;
-  color: var(--btn-primary-text) !important;
-  border: 1px solid transparent !important;
-  border-radius: 8px !important;
-  padding: 0.875rem 1.5rem !important;
-  font-size: 0.875rem !important;
-  font-weight: 500 !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.4) !important;
+  border-radius: 12px !important;
+  padding: 1rem 1.5rem !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
   cursor: pointer !important;
-  transition: background 0.2s ease, transform 0.1s ease !important;
-  box-shadow: none !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
 }
 
 .join-btn:hover, .create-btn:hover, .primary-btn:hover {
   background: var(--btn-primary-hover) !important;
-  transform: none !important;
-  box-shadow: none !important;
+  transform: translateY(-1px) scale(1.02) !important;
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5) !important;
 }
 
 .secondary-btn {
-  background: transparent !important;
-  color: var(--text-secondary) !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: 8px !important;
-  transition: all 0.2s ease !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(20px) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
 }
 
 .secondary-btn:hover {
-  border-color: var(--text-primary) !important;
-  color: var(--text-primary) !important;
-  background: transparent !important;
-}
-
-/* Active Room Items */
-.room-item {
-  background: transparent !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: 8px !important;
-  padding: 1rem !important;
-  transition: all 0.2s ease !important;
-}
-
-.room-item:hover {
-  border-color: var(--border-hover) !important;
-  transform: none !important;
-  background: rgba(255, 255, 255, 0.02) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 /* ============================================================
    ROOM & VIDEO CALL OVERRIDES
    ============================================================ */
 
-/* The actual video boxes */
+/* Video Containers */
 .video-container {
-  background: var(--card-bg) !important;
-  border-radius: 12px !important;
+  background: rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(20px) !important;
+  border-radius: 24px !important;
   overflow: hidden !important;
-  box-shadow: none !important;
-  border: 1px solid var(--border-color) !important;
-  transition: border-color 0.2s ease !important;
-  position: relative !important;
+  border: 1px solid var(--glass-border) !important;
+  border-top: 1px solid rgba(255,255,255,0.2) !important;
+  transition: all 0.3s ease !important;
+  box-shadow: var(--glass-shadow) !important;
 }
 
 .video-container:hover {
-  transform: none !important;
-  border-color: var(--border-hover) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Speaking Indicator Glow -> Minimalist solid white border */
+/* Active Speaker Glow */
 .video-container.speaking {
-  border: 1px solid var(--text-primary) !important;
-  box-shadow: none !important;
-}
-
-/* The name badge on the video */
-.username-tag {
-  background: rgba(0, 0, 0, 0.8) !important;
-  backdrop-filter: none !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: 6px !important;
-  padding: 0.35rem 0.75rem !important;
-  font-size: 0.75rem !important;
-  font-weight: 500 !important;
-  bottom: 1rem !important;
-  left: 1rem !important;
-  box-shadow: none !important;
-  color: var(--text-primary) !important;
+  border-color: var(--accent-cyan) !important;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.4), inset 0 0 10px rgba(34, 211, 238, 0.2) !important;
 }
 
 /* Floating Controls Dock */
 .controls-bar {
-  background: var(--bg-color) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border: 1px solid var(--border-color) !important;
+  background: rgba(20, 20, 25, 0.7) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.25) !important;
   border-radius: 99px !important;
-  padding: 0.5rem 1rem !important;
+  padding: 0.75rem 1.5rem !important;
   width: auto !important;
   max-width: fit-content !important;
-  margin: 0 auto 1.5rem auto !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5) !important;
+  margin: 0 auto 2rem auto !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4) !important;
   display: flex !important;
-  gap: 0.5rem !important;
-  justify-content: center !important;
+  gap: 0.75rem !important;
   align-items: center !important;
 }
 
-/* Control Buttons */
+/* Dock Buttons */
 .control-btn {
-  background: transparent !important;
-  border: 1px solid transparent !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
   border-radius: 50% !important;
-  width: 48px !important;
-  height: 48px !important;
-  transition: all 0.2s ease !important;
-  color: var(--text-secondary) !important;
+  width: 50px !important;
+  height: 50px !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  color: var(--text-primary) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
 }
 
 .control-btn:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: var(--text-primary) !important;
-  transform: none !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  transform: scale(1.05) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
-.control-btn.active, .control-btn.on {
-  color: var(--text-primary) !important;
-}
-
-.control-btn.off {
-  color: var(--accent-destructive) !important;
+/* Destructive / Red Buttons */
+.leave-btn, .end-meeting-btn, .control-btn.off {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(220, 38, 38, 0.8)) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
 }
 
 .leave-btn, .end-meeting-btn {
-  background: var(--accent-destructive) !important;
-  color: white !important;
   border-radius: 99px !important; /* Pill */
   width: auto !important;
-  min-width: 64px !important;
-  height: 40px !important;
-  padding: 0 1.25rem !important;
-  border: none !important;
-  font-size: 0.875rem !important;
+  min-width: 80px !important;
+  padding: 0 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+.leave-btn:hover, .end-meeting-btn:hover, .control-btn.off:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 1), rgba(220, 38, 38, 1)) !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5) !important;
+}
+
+/* Name Tag on Video */
+.username-tag {
+  background: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px !important;
+  padding: 0.4rem 0.8rem !important;
   font-weight: 500 !important;
-  box-shadow: none !important;
-  margin-left: 0.5rem !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
 }
 
-.leave-btn:hover, .end-meeting-btn:hover {
-  background: var(--accent-destructive-hover) !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-/* ============================================================
-   CUSTOM SCROLLBAR
-   ============================================================ */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
-/* Animations */
 @keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
