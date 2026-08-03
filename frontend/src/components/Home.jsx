@@ -267,7 +267,7 @@ const Home = (props) => {
 
                     <aside className="glass-card lobby-card">
                         <div className="tabs-container">
-                            <h3 style={{ marginBottom: '1rem' }}><Globe size={18} /> Lobby</h3>
+                            <h3 style={{ marginBottom: '1rem' }}><Globe size={18} /> Lobbi</h3>
                         </div>
 
                         <div className="lobby-section">
@@ -485,7 +485,7 @@ const Home = (props) => {
                                     onChange={(e) => setIsPublic(e.target.checked)}
                                     style={{ width: '20px', height: '20px', cursor: 'pointer' }}
                                 />
-                                <label htmlFor="public-check" style={{ marginBottom: 0, cursor: 'pointer' }}>Visible in Lobby (Public)</label>
+                                <label htmlFor="public-check" style={{ marginBottom: 0, cursor: 'pointer' }}>Visible in Lobbi (Public)</label>
                             </div>
                             <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', marginTop: '-0.5rem' }}>
                                 If private, only those with the link can join.
